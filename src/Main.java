@@ -1,11 +1,12 @@
 import java.util.*;
+
 class BankAccount {
     private int balance;
 
     public static void main(String[] args) {
-        BankAccount[] accounts = new BankAccount[2];
-        accounts[0] = new BankAccount();
-        accounts[1] = new BankAccount();
+        ArrayList<BankAccount> accounts = new ArrayList<>();
+        accounts.add(new BankAccount());
+        accounts.add(new BankAccount());
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -23,13 +24,13 @@ class BankAccount {
                     System.out.println("Enter deposit sum");
                     int inputDeposit = scanner.nextInt();
                     scanner.nextLine();
-                    accounts[0].deposit(inputDeposit);
+                    accounts.get(0).deposit(inputDeposit);
                     break;
                 case 2:
-                    System.out.println("Enter deposit sum");
+                    System.out.println("Enter withdraw sum");
                     int inputWithdraw = scanner.nextInt();
                     scanner.nextLine();
-                    accounts[0].withdraw(inputWithdraw);
+                    accounts.get(0).withdraw(inputWithdraw);
                     break;
                 case 3:
                     System.out.println("Enter amount of money you want to transfer");
@@ -37,15 +38,15 @@ class BankAccount {
                     System.out.println("Enter account number you want to transfer money to");
                     int recipientAccountIndex = scanner.nextInt();
                     scanner.nextLine();
-                    if (recipientAccountIndex >= 0 && recipientAccountIndex < accounts.length) {
-                        accounts[0].transfer(accounts[recipientAccountIndex], inputTransferCash);
+                    if (recipientAccountIndex >= 0 && recipientAccountIndex < accounts.size()) {
+                        accounts.get(0).transfer(accounts.get(recipientAccountIndex), inputTransferCash);
                     } else {
                         System.out.println("Invalid account number.");
                     }
                     break;
                 case 4:
                     System.out.println("Check accounts balance");
-                    for (int i = 0; i < accounts.length; i++) {
+                    for (int i = 0; i < accounts.size(); i++) {
                         printBalance(accounts, i);
                     }
                     break;
@@ -58,6 +59,7 @@ class BankAccount {
             }
         }
     }
+
     public BankAccount() {
         this.balance = 0;
     }
@@ -68,7 +70,7 @@ class BankAccount {
             System.out.println(amount + " deposited successfully.");
             System.out.println("Your new balance is " + balance + " euro");
         } else {
-            System.out.println("Error, please check your balance or withdraw sum entered!");
+            System.out.println("Error, please check your balance or deposit sum entered!");
         }
     }
 
@@ -82,8 +84,8 @@ class BankAccount {
         }
     }
 
-    public static void printBalance(BankAccount[] accounts,int id) {
-        System.out.println("Current balance of account with id " + id + ": " + accounts[id].balance);
+    public static void printBalance(ArrayList<BankAccount> accounts, int id) {
+        System.out.println("Current balance of account with id " + id + ": " + accounts.get(id).balance);
     }
 
     public void transfer(BankAccount recipient, int amount) {
