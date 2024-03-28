@@ -1,12 +1,16 @@
+import java.io.*;
 import java.util.*;
 
-class BankAccount {
+class BankAccount implements Serializable {
     private int balance;
 
     public static void main(String[] args) {
-        ArrayList<BankAccount> accounts = new ArrayList<>();
-        accounts.add(new BankAccount());
-        accounts.add(new BankAccount());
+        ArrayList<BankAccount> accounts = loadAccounts();
+        if (accounts.isEmpty()) {
+            accounts.add(new BankAccount());
+            accounts.add(new BankAccount());
+            accounts.add(new BankAccount());
+        }
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -51,6 +55,7 @@ class BankAccount {
                     }
                     break;
                 case 5:
+                    saveAccounts(accounts);
                     System.out.println("Exiting the program");
                     System.exit(0);
                     break;
@@ -97,5 +102,24 @@ class BankAccount {
         } else {
             System.out.println("Insufficient balance or invalid amount for transfer.");
         }
+    }
+
+    private static void saveAccounts(ArrayList<BankAccount> accounts) {
+        try (ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream("accounts.txt"))) {
+            outStream.writeObject(accounts);
+        } catch (IOException e) {
+            System.out.println("Error saving accounts: " + e.getMessage());
+        }
+    }
+
+    private static ArrayList<BankAccount> loadAccounts() {
+        ArrayList<BankAccount> accounts = new ArrayList<>();
+        try (ObjectInputStream inStream = new ObjectInputStream(new FileInputStream("accounts.txt"))) {
+            Object read = inStream.readObject();
+            accounts = (ArrayList<BankAccount>) read;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("No existing accounts found. Creating new accounts.");
+        }
+        return accounts;
     }
 }
