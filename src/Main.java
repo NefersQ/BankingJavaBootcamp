@@ -122,4 +122,8 @@ class BankAccount implements Serializable {
         }
         return accounts;
     }
+
+    public int getBalance() {
+        return balance;
+    }
 }
